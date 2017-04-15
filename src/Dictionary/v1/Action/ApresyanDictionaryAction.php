@@ -39,7 +39,7 @@ class ApresyanDictionaryAction implements ActionInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        $text = (string)$request->getAttribute('text');
+        $text = urldecode((string)$request->getAttribute('text'));
         $path = $this->config->get('dictionary.path.apresyan');
 
         $example = '';

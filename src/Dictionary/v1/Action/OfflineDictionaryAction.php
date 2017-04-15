@@ -44,7 +44,7 @@ class OfflineDictionaryAction implements ActionInterface
         setlocale(LC_ALL, $locale);
         putenv('LC_ALL='.$locale);
 
-        $text = (string)$request->getAttribute('text');
+        $text = urldecode((string)$request->getAttribute('text'));
         $path = $this->config->get('dictionary.path.offline');
 
         $transcription = [];
