@@ -3,7 +3,7 @@
 return [
     'dictionary' => [
         'path' => [
-            'offline' => 'data/dictionaries/stardict',
+            'stardict' => 'data/dictionaries/stardict',
             'apresyan' => 'data/dictionaries/apresyan',
         ]
     ]

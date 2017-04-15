@@ -27,6 +27,9 @@
  */
 /* @var $app \Zend\Expressive\Application */
 
-/* /api/v1/offline?text=sdfsdfsdfsdf */
-$app->get('/api/{version}/offline/{text}', Dictionary\Action\OfflineDictionaryAction::class, 'dictionary.offline');
-$app->get('/api/{version}/apresyan/{text}', Dictionary\Action\ApresyanDictionaryAction::class, 'dictionary.apresyan');
+/* /api/v1/stardict/cat */
+$app->get(
+    '/api/{version:v1}/{adapter:stardict|apresyan}/{text}',
+    Dictionary\Action\DictionaryAction::class,
+    'dictionary'
+);

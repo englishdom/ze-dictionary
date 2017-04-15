@@ -1,56 +1,35 @@
 <?php
 
-namespace Dictionary\Action;
+namespace Dictionary\Adapter;
 
-use Common\Action\ActionInterface;
-use Common\Container\ConfigInterface;
 use Dictionary\Entity\Dictionary;
-use Dictionary\Transformer\DictionaryTransformer;
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use League\Fractal\Resource\Item;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Zend\Http\Response;
 
-/**
- * Class OfflineDictionary
- * @package Common\Adapter
- */
-class OfflineDictionaryAction implements ActionInterface
+class StardictAdapter implements AdapterInterface
 {
     /**
-     * @var ConfigInterface
+     * @var
      */
-    private $config;
+    private $path;
 
     /**
-     * OfflineDictionaryAction constructor.
-     * @param ConfigInterface $config
+     * StardictAdapter constructor.
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct($path)
     {
-        $this->config = $config;
+        $this->path = $path;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface $delegate
-     * @return ResponseInterface
-     */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function __invoke($text): Dictionary
     {
         /* Set locale for read russian text */
         $locale = 'ru_RU.UTF-8';
         setlocale(LC_ALL, $locale);
         putenv('LC_ALL='.$locale);
 
-        $text = urldecode((string)$request->getAttribute('text'));
-        $path = $this->config->get('dictionary.path.offline');
-
         $transcription = [];
         $example = '';
         foreach (explode(' ', $text) as $string) {
-            $cmd = "sdcv --data-dir " . $path . " -n --utf8-output --utf8-input "
+            $cmd = "sdcv --data-dir " . $this->path . " -n --utf8-output --utf8-input "
                 . escapeshellarg($string);
             $output = shell_exec(
                 $cmd
@@ -89,17 +68,6 @@ class OfflineDictionaryAction implements ActionInterface
         $dictionary->setTranscription(implode(' ', $transcription));
         $dictionary->setExample($example);
 
-        $item = new Item($dictionary, new DictionaryTransformer(), $this->getResourceName());
-
-        $request = $request
-            ->withAttribute(self::RESPONSE, $item)
-            ->withAttribute(self::HTTP_CODE, Response::STATUS_CODE_200);
-
-        return $delegate->process($request);
-    }
-
-    public function getResourceName(): string
-    {
-        return 'offline';
+        return $dictionary;
     }
 }

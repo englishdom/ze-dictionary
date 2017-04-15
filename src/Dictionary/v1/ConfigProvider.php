@@ -20,8 +20,8 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                Action\OfflineDictionaryAction::class => Factory\OfflineDictionaryFactory::class,
-                Action\ApresyanDictionaryAction::class => Factory\ApresyanDictionaryFactory::class,
+                Action\DictionaryAction::class => Factory\DictionaryActionFactory::class,
+                Adapter\AdapterManager::class => Factory\AdapterFactory::class,
             ],
         ];
     }
