@@ -34,6 +34,8 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer && \
     chmod +x /usr/local/bin/composer
 
+RUN apt-get install -y sdcv
+
 ARG PUID=1000
 RUN usermod -u ${PUID} www-data
 ARG PROJECT_PATH=/var/www/html

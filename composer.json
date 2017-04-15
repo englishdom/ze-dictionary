@@ -1,8 +1,8 @@
 {
-    "name": "newage/dictionary",
+    "name": "newage/ze-dictionary",
     "description": "REST API for working with offline dictionaries",
     "type": "project",
-    "homepage": "https://github.com/newage/dictionary",
+    "homepage": "https://github.com/newage/ze-dictionary",
     "license": "MIT",
     "authors": [
         {

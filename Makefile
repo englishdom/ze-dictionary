@@ -32,6 +32,9 @@ dc-start: ## Start docker containers described in docker-compose.yml
 build-backend: ## Build backend
 	docker-compose exec --user www-data php sh -c "composer install"
 
+start-server: ## Start php server localhost:8080
+	docker-compose exec --user www-data php sh -c "composer serve"
+
 ####################################################################################################
 # Connect to containers
 ####################################################################################################
