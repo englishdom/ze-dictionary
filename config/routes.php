@@ -25,7 +25,8 @@
  *     'contact'
  * );
  */
-
 /* @var $app \Zend\Expressive\Application */
-$app->get('/', App\Action\HomePageAction::class, 'home');
-$app->get('/api/ping', App\Action\PingAction::class, 'api.ping');
+
+/* /api/v1/offline?text=sdfsdfsdfsdf */
+$app->get('/api/{version}/offline/{text}', Dictionary\Action\OfflineDictionaryAction::class, 'dictionary.offline');
+$app->get('/api/{version}/apresyan', Dictionary\Action\ApresyanDictionaryAction::class, 'dictionary.apresyan');
