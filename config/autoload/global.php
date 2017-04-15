@@ -1,5 +1,10 @@
 <?php
 
 return [
-    'host' => 'http://rest-api/',
+    'dictionary' => [
+        'path' => [
+            'offline' => 'data/dictionaries/stardict',
+            'apresyan' => 'data/dictionaries/apresyan',
+        ]
+    ]
 ];

@@ -19,11 +19,9 @@ class ConfigProvider
     public function getDependencies()
     {
         return [
-            'invokables' => [
-                Action\ApresyanDictionaryAction::class => Action\ApresyanDictionaryAction::class,
-            ],
             'factories' => [
                 Action\OfflineDictionaryAction::class => Factory\OfflineDictionaryFactory::class,
+                Action\ApresyanDictionaryAction::class => Factory\ApresyanDictionaryFactory::class,
             ],
         ];
     }

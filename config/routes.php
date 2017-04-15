@@ -29,4 +29,4 @@
 
 /* /api/v1/offline?text=sdfsdfsdfsdf */
 $app->get('/api/{version}/offline/{text}', Dictionary\Action\OfflineDictionaryAction::class, 'dictionary.offline');
-$app->get('/api/{version}/apresyan', Dictionary\Action\ApresyanDictionaryAction::class, 'dictionary.apresyan');
+$app->get('/api/{version}/apresyan/{text}', Dictionary\Action\ApresyanDictionaryAction::class, 'dictionary.apresyan');

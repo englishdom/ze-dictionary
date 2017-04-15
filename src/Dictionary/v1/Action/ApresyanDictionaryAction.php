@@ -3,9 +3,14 @@
 namespace Dictionary\Action;
 
 use Common\Action\ActionInterface;
+use Common\Container\ConfigInterface;
+use Dictionary\Entity\Dictionary;
+use Dictionary\Transformer\DictionaryTransformer;
 use Interop\Http\ServerMiddleware\DelegateInterface;
+use League\Fractal\Resource\Item;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Http\Response;
 
 /**
  * Class OfflineDictionary
@@ -13,48 +18,33 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class ApresyanDictionaryAction implements ActionInterface
 {
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
 
     /**
-     * @var string
+     * ApresyanDictionaryAction constructor.
+     * @param ConfigInterface $config
      */
-    protected $parameters = false;
-
-    /**
-     * @param string $parameters
-     */
-    public function setParameters($parameters)
+    public function __construct(ConfigInterface $config)
     {
-        $this->parameters = $parameters;
+        $this->config = $config;
     }
 
     /**
-     * @return string
-     * @throws \Exception
-     */
-    public function getParameters()
-    {
-        if (false === $this->parameters) {
-            throw new RuntimeException('Parameters for dictionary must be set');
-        }
-
-        return $this->parameters;
-    }
-
-    public function getResourceName(): string
-    {
-        return 'apresyan';
-    }
-
-    /**
-     * @param string $text
-     * @param $content
-     * @return array
+     * @param ServerRequestInterface $request
+     * @param DelegateInterface $delegate
+     * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
+        $text = (string)$request->getAttribute('text');
+        $path = $this->config->get('dictionary.path.apresyan');
+
         $example = '';
         foreach (explode(' ', $text) as $string) {
-            $output = shell_exec("sdcv " . $this->getParameters() . " " . escapeshellarg($string));
+            $output = shell_exec("sdcv " . $path . " " . escapeshellarg($string));
 
             /* Получение всех аглийских примеров примеров более 3х символов */
             preg_match_all('~[^Found]^[a-zA-Z\s\,\.\(\)\']{5,}~m', $output, $matches);
@@ -83,30 +73,22 @@ class ApresyanDictionaryAction implements ActionInterface
             $example = array_shift($matches);
         }
 
-        return $example;
+        $dictionary = new Dictionary();
+        $dictionary->setId(0);
+        $dictionary->setText($text);
+        $dictionary->setExample($example);
+
+        $item = new Item($dictionary, new DictionaryTransformer(), $this->getResourceName());
+
+        $request = $request
+            ->withAttribute(self::RESPONSE, $item)
+            ->withAttribute(self::HTTP_CODE, Response::STATUS_CODE_200);
+
+        return $delegate->process($request);
     }
 
-    /**
-     * @param $path
-     * @param int $chmod
-     * @return mixed
-     */
-    public function create($path, $chmod = 0777)
+    public function getResourceName(): string
     {
-    }
-
-    /**
-     * @return mixed
-     */
-    public function update()
-    {
-    }
-
-    /**
-     * @param $path
-     * @return mixed
-     */
-    public function delete($path)
-    {
+        return 'apresyan';
     }
 }
