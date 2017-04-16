@@ -7,7 +7,7 @@ use Dictionary\Entity\Dictionary;
 class ApresyanAdapter implements AdapterInterface
 {
     /**
-     * @var
+     * @var string
      */
     private $path;
 

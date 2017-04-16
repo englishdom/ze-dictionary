@@ -7,7 +7,7 @@ use Dictionary\Entity\Dictionary;
 class StardictAdapter implements AdapterInterface
 {
     /**
-     * @var
+     * @var string
      */
     private $path;
 

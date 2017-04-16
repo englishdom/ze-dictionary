@@ -38,14 +38,13 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/App/src/",
             "Common\\": "library/Common/",
             "Dictionary\\": "src/Dictionary/v1/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DictionaryTest\\": "test/Dictionary/"
+            "Dictionary\\Test\\": "test/Dictionary/"
         }
     },
     "extra": {
