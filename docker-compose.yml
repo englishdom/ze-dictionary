@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+    php:
+        build:
+            context: docker/php
+            args:
+                - INSTALL_XDEBUG=${DEV_MODE}
+                - PUID=${PUID}
+        container_name: dictionary-php
+        ports:
+            - 8080:8080
+        expose:
+            - 9000
+        volumes:
+            - ./docker/php/conf/php.ini:/usr/local/etc/php/conf.d/custom.ini
+            - ./:/var/www/html
