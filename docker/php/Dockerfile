@@ -5,9 +5,6 @@ RUN apt-get update
 # Install env
 RUN apt-get install -y git
 
-# Some basic extensions
-RUN docker-php-ext-install -j$(nproc) json mbstring opcache pdo pdo_mysql
-
 # Curl
 RUN apt-get install -y libcurl4-openssl-dev
 RUN docker-php-ext-install -j$(nproc) curl
@@ -34,6 +31,7 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer && \
     chmod +x /usr/local/bin/composer
 
+# sdcv
 RUN apt-get install -y sdcv
 
 ARG PUID=1000
