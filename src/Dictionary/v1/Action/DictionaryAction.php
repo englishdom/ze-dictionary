@@ -40,7 +40,7 @@ class DictionaryAction implements ActionInterface
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
         $adapter = $this->manager->getAdapter((string)$request->getAttribute('adapter'));
-        $dictionary = $adapter(urldecode((string)$request->getAttribute('text')));
+        $dictionary = $adapter(urldecode($this->sanitizeString($request->getAttribute('text'))));
 
         $item = new Item($dictionary, new DictionaryTransformer(), $this->getResourceName());
 
@@ -54,5 +54,11 @@ class DictionaryAction implements ActionInterface
     public function getResourceName(): string
     {
         return 'stardict';
+    }
+
+    private function sanitizeString($string): string
+    {
+        $regex = '~[^\s\w\d\-]+~';
+        return preg_replace($regex, '', $string);
     }
 }
